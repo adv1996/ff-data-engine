@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Fantasy Football Sample Data
+/example_outputs
+ffDB.db
