@@ -18,29 +18,38 @@ def create_connection(db_file):
   return conn
   
 def add_user(conn, user):
-  """
-  Create a new project into the projects table
-  :param conn:
-  :param project:
-  :return: project id
-  """
-  sql = ''' INSERT INTO users(user_id,username)
+  sql = ''' INSERT INTO Users(user_id,username)
             VALUES(?,?) '''
   cur = conn.cursor()
   cur.execute(sql, user)
   return cur.lastrowid
 
 def add_users(conn, users):
-  """
-  Create a new project into the projects table
-  :param conn:
-  :param project:
-  :return: project id
-  """
-  sql = ''' INSERT INTO users(user_id,username)
+  sql = ''' INSERT INTO Users(user_id,username)
             VALUES(?,?) '''
   cur = conn.cursor()
   cur.executemany(sql, users)
+
+def add_leagues(conn, leagues):
+  sql = ''' INSERT INTO Leagues(league_id,league_name,total_rosters,platform,roster_positions,season,season_type)
+            VALUES(?,?,?,?,?,?,?) '''
+  cur = conn.cursor()
+  cur.executemany(sql, leagues)
+
+def add_leagues_to_user(leagues, user_id):
+  league_user_pairs = []
+  for league in leagues:
+    league_user_pairs.append((
+      user_id,
+      league[0]
+    ))
+  return league_user_pairs
+
+def add_userLeague(conn, league_users):
+  sql = ''' INSERT INTO UserLeague(user_id,league_id)
+            VALUES(?,?) '''
+  cur = conn.cursor()
+  cur.executemany(sql, league_users)
 
 def main():
   database = r"ffDB.db" # use an env variable for this
@@ -52,10 +61,17 @@ def main():
     # we will only add a new user if the user does not exist in the db prior
     # user = ('94862074874052608','adv1996');
     # users = parse_espn_users()
-    # add_users(conn, users)
     # TODO figure out way to use same database connection to either add users,
     # or retrieve values for backup
-    backup_users_table(conn)
+    # backup_users_table(conn)
+    # users = load_backup_users_table()
+    # add_users(conn, users)
+    user_id = "94862074874052608"
+    leagues = get_leagues_sleeper("94862074874052608")
+    # league_user_pairs = add_leagues_to_user(leagues, user_id)
+    # add_userLeague(conn, league_user_pairs)
+    
+    add_leagues(conn, leagues)
   conn.close()
 
 def parse_espn_users():
@@ -91,10 +107,43 @@ def backup_users_table(conn):
     })
   saveJson('backup_users.json', data)
 
-#TODO load backup data function, when should we backup data?
+def load_backup_users_table():
+  backup_file = 'backup_users.json'
+  data = []
+  with open(backup_file) as json_file:
+    data = json.load(json_file)
+  json_file.close()
+  users = []
+  for row in data:
+    # investigate if easier way to convert dict to tuple
+    users.append((
+      row['user_id'],
+      row['username']
+    ))
+  return users;
 
-def get_leagues_sleeper(username):
-  # first need to get user_id from username
+def get_user_id_sleeper(username):
+  user_data = sleeperFetches.getUser(username)
+  # need to verfiy or be alerted if this id doesn't exist
+  return user_data['user_id']
+
+def get_leagues_sleeper(user_id):
+  user_leagues = sleeperFetches.getLeagues(user_id, 2019)
+  leagues = []
+  for league in user_leagues:
+    if league['sport'] == "nfl":
+      leagues.append((
+        league['league_id'],
+        league['name'],
+        league['total_rosters'], #need to use single value or migrate to Postgres
+        'sleeper',
+        ",".join(league['roster_positions']),
+        league['season'], # league id is per year basis for sleeper
+        league['season_type']
+        # "draft_id": league['draft_id'],
+        # "avatar": league['avatar']
+      ))
+  return leagues
   
 def saveJson(filename, data):
   with open(filename, 'w') as outfile:
@@ -104,3 +153,4 @@ def saveJson(filename, data):
 
 if __name__ == '__main__':
   main()
+  # get_leagues_sleeper("94862074874052608")

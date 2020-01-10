@@ -44,9 +44,14 @@ def getDraft(league_id, draft_id):
 def getUser(username):
   sleeper_url = "https://api.sleeper.app/v1/user/" + username
   response = requests.get(sleeper_url)
-  filename = "sleeper/users/" + username + ".json"
-  saveJson(filename, response.json())
-  return response;
+  # filename = "sleeper/users/" + username + ".json"
+  # saveJson(filename, response.json())
+  return response.json();
+
+def getLeagues(user_id, season):
+  sleeper_url = "https://api.sleeper.app/v1/user/" + user_id + "/leagues/nfl/" + str(season)
+  response = requests.get(sleeper_url)
+  return response.json()
 
 def saveJson(filename, data):
   with open(filename, 'w') as outfile:
