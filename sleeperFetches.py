@@ -26,14 +26,14 @@ def getLeagueSettings(league_id):
 def getLeagueUsers(league_id):
   sleeper_url = "https://api.sleeper.app/v1/league/" + league_id + "/users"
   response = requests.get(sleeper_url)
-  filename = "leagues/" + league_id + "/users.json"
-  saveJson(filename, response.json())
+  return response.json()
 
 def getLeagueRosters(league_id):
   sleeper_url = "https://api.sleeper.app/v1/league/" + league_id + "/rosters"
   response = requests.get(sleeper_url)
   filename = "leagues/" + league_id + "/rosters.json"
-  saveJson(filename, response.json())
+  # saveJson(filename, response.json())
+  return response.json()
 
 def getDraft(league_id, draft_id):
   sleeper_url = "https://api.sleeper.app/v1/draft/" + draft_id + "/picks"

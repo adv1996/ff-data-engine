@@ -17,6 +17,12 @@ CREATE TABLE Leagues (
 CREATE TABLE UserLeague (
     user_id CHAR(25) NOT NULL,
     league_id CHAR(25) NOT NULL,
+    roster_id INTEGER NOT NULL,
+    wins INTEGER NOT NULL,
+    ties INTEGER NOT NULL,
+    fpts INTEGER NOT NULL,
+    losses INTEGER NOT NULL,
+    fpts_against NOT NULL,
     PRIMARY KEY (user_id, league_id),
     FOREIGN KEY(user_id) REFERENCES Users(user_id)
     FOREIGN KEY(league_id) REFERENCES Leagues(league_id) 
