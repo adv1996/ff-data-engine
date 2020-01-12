@@ -1,0 +1,17 @@
+{
+  "name": "ff-data-api",
+  "version": "1.0.0",
+  "description": "GraphQL API for Fantasy Football Database",
+  "main": "index.js",
+  "author": "Advaith Venkatakrishnan",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.5.8",
+    "sqlite3": "^4.1.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
