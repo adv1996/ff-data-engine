@@ -131,3 +131,5 @@ dmypy.json
 # Fantasy Football Sample Data
 /example_outputs
 ffDB.db
+
+/ff-data-api/node_modules
