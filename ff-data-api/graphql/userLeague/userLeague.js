@@ -8,12 +8,12 @@ const UserLeagueType = new graphql.GraphQLObjectType({
   fields: {
     user_id: { type: graphql.GraphQLID },
     league_id: { type: graphql.GraphQLID },
-    roster_id: { type: graphql.GraphQLID },
-    wins: { type: graphql.GraphQLID },
-    ties: { type: graphql.GraphQLID },
-    fpts: { type: graphql.GraphQLID },
-    losses: { type: graphql.GraphQLID },
-    fpts_against: { type: graphql.GraphQLID },
+    roster_id: { type: graphql.GraphQLInt },
+    wins: { type: graphql.GraphQLInt },
+    ties: { type: graphql.GraphQLInt },
+    fpts: { type: graphql.GraphQLInt },
+    losses: { type: graphql.GraphQLInt },
+    fpts_against: { type: graphql.GraphQLInt },
   }
 });
 
