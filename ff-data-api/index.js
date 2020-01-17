@@ -2,12 +2,13 @@ const  express  =  require('express');
 const ExpressGraphQL = require("express-graphql");
 const userSchema = require("./graphql/users/users.js");
 const userLeagueSchema = require("./graphql/userLeague/userLeague.js");
+const leagueSchema = require("./graphql/leagues/leagues.js");
 const  app  =  express();
 const cors = require('cors')
 
 const {mergeSchemas} = require('graphql-tools');
 const schema = mergeSchemas({
-    schemas: [userSchema.schema, userLeagueSchema.schema]
+    schemas: [userSchema.schema, userLeagueSchema.schema, leagueSchema.schema]
 })
 app.use(cors())
 app.use("/graphql", ExpressGraphQL({ schema: schema, graphiql: true}));
